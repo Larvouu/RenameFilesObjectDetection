@@ -10,8 +10,10 @@
 
 # importing os module 
 import os 
+#importing minidom in order to modify XML files
+import xml.dom.minidom as md 
 
-folderPath   = 'images\\test\\' # mettre le path de train, run, puis mettre le path de test, run
+folderPath   = 'images\\' # mettre le path de train, run, puis mettre le path de test, run
 
 suffix_xml          = '.xml'
 suffix_xml_upper    = '.XML'
@@ -24,35 +26,68 @@ suffix_jpeg_upper   = '.JPEG'
 
 prefix_img          = "species_img_" #Le préfixe des images
 
+newJpgFileName      = " "
 
+# Function to modify XML file tag <filename> xxx </filename>
+def modifyFileNameInXml(xml_file, associated_filename) :
+
+    file = md.parse(xml_file) 
+
+    # modifying the value of a tag(here "age") 
+    file.getElementsByTagName( "filename" )[ 0 ].firstChild.nodeValue = associated_filename
+
+    # writing the changes in "file" object to  
+    # the "xml_file.xml" file 
+    with open(xml_file, "w" ) as fs:  
   
-# Function to rename multiple files in a folder
-def main(): 
-  
+        fs.write( file.toxml() ) 
+        fs.close()  
+
+    #print success
+    print("Fichier XML mis à jour")
+
+def renameEnMasse() :
     for count, filename in enumerate(os.listdir(folderPath)): 
 
-        dst = " "
+        dst            = " "
+    
         #if file is a .jpg or .JPG
         if  filename.endswith(suffix_jpg) :
-            dst = prefix_img    + str(count) + suffix_jpg
+            dst            = prefix_img    + str(count) + suffix_jpg
+            newJpgFileName = dst
         elif filename.endswith(suffix_jpg_upper) : 
-            dst = prefix_img    + str(count) + suffix_jpg_upper
+            dst            = prefix_img    + str(count) + suffix_jpg_upper
+            newJpgFileName = dst
         #if file is a .jpeg or .JPEG
         elif filename.endswith(suffix_jpeg) :
-            dst = prefix_img    + str(count) + suffix_jpeg
+            dst            = prefix_img    + str(count) + suffix_jpeg
+            newJpgFileName = dst
         elif filename.endswith(suffix_jpeg_upper) : 
-            dst = prefix_img    + str(count) + suffix_jpeg_upper
+            dst            = prefix_img    + str(count) + suffix_jpeg_upper
+            newJpgFileName = dst
         #if file is a .xml or .XML
         elif filename.endswith(suffix_xml) or filename.endswith(suffix_xml_upper) :
-            count = count-1
-            dst   = prefix_img    + str(count) + suffix_xml
+            count          = count-1
+            dst            = prefix_img    + str(count) + suffix_xml
 
         src = folderPath + filename 
         dst = folderPath + dst 
           
         if not filename.endswith('.gitkeep') :
+            #Rename le fichier
             os.rename(src, dst) 
             print(src + '  -->  ' + dst)
+            #
+            if filename.endswith(suffix_xml) or filename.endswith(suffix_xml_upper) :
+                modifyFileNameInXml(dst, newJpgFileName)
+
+  
+
+
+# Function to rename multiple files in a folder
+def main(): 
+    renameEnMasse()
+    
   
 # Driver Code 
 if __name__ == '__main__': 
