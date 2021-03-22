@@ -1,11 +1,12 @@
 #Avant d'utiliser ce code, on admet que le tag <filename> est correct ! 
+#Ce code doit être placé au même niveau que le dossier qui contient les XML (pas dedans)
 
 #importing os
 import os
 import xml.dom.minidom as md
 from pathlib import Path
 
-folderPath       = 'images_et_xml\\'                             # mettre le path 
+folderPath       = 'bonjour_je_suis_le_path_du_dossier_qui_contient_les_XML\\'      # mettre le path 
 
 suffix_xml       = '.xml'
 suffix_xml_upper = '.XML'
