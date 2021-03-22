@@ -6,7 +6,7 @@ import os
 import xml.dom.minidom as md
 from pathlib import Path
 
-folderPath       = 'bonjour_je_suis_le_path_du_dossier_qui_contient_les_XML\\'      # mettre le path 
+folderPath       = 'bonjour_modifiez_moi_svp_mais_gardez_les_slash\\'      # mettre le path 
 
 suffix_xml       = '.xml'
 suffix_xml_upper = '.XML'
@@ -15,9 +15,10 @@ suffix_xml_upper = '.XML'
 def modifyFolderAndPathInXml(xml_file) :
 
     file = md.parse(xml_file) 
+    folderPathWithoutSlash = folderPath[:-1]
 
     # modifying the value of tag <folder>
-    file.getElementsByTagName("folder")[ 0 ].firstChild.nodeValue = folderPath
+    file.getElementsByTagName("folder")[ 0 ].firstChild.nodeValue = folderPathWithoutSlash
     # modifying the value of tag <path>
     file.getElementsByTagName("path")[ 0 ].firstChild.nodeValue = Path(xml_file).absolute()
 
